@@ -1,5 +1,8 @@
 package com.eco.trader.util.scraper;
 
+import com.eco.trader.util.scraper.runners.DefaultURLTesters;
+import com.eco.trader.util.url.NotValidYahooFinanceURLException;
+import com.eco.trader.util.url.URLNotValidException;
 import org.javatuples.Pair;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -22,29 +25,46 @@ public class YahooFinanceScraperTest {
 
     @Test
     public void shouldReturnTrueWhenAYahooFinanceURL() {
-        assertThat(true, is(equalTo(YahooFinanceScraper.isYahooFinanceURL(yahooFinanceWebURL))));
+        // Arrange
+        boolean expected = DefaultURLTesters.yahooFinanceURLTester.isViableURL(yahooFinanceWebURL);
+        // Assert
+        assertThat(true, is(equalTo(expected)));
     }
 
-    @Test(expected = NotYahooFinanceURLException.class)
-    public void whenWrongURLGiven_thenItShouldThrowAnException() throws NotYahooFinanceURLException {
-        YahooFinanceScraper.testURL("https://www.baeldung.com/");
+    @Test(expected = NotValidYahooFinanceURLException.class)
+    public void whenWrongURLGiven_thenItShouldThrowAnException() throws URLNotValidException {
+        // Arrange
+        String url = "https://www.baeldung.com/";
+        // Assert
+        DefaultURLTesters.yahooFinanceURLTester.testURL(url);
     }
 
     @Test
     public void shouldReturnCurrentValue() {
-        assertThat(Double.class, is(equalTo(Double.valueOf(yahooFinanceScraper.getCurrentValue()).getClass())));
+        // Action
+        Class<? extends Double> expectedClass = Double.valueOf(yahooFinanceScraper.getFinanceRunner().getCurrentValue()).getClass();
+        // Assert
+        assertThat(Double.class, is(equalTo(expectedClass)));
     }
 
     @Test
     public void shouldReturnCurrentChangeAmountAndRatio() {
+        // Arrange
         final Pair<Double, Double> doublePair = new Pair<>(1.0, 1.0);
-        assertThat(doublePair.getClass(), is(equalTo(yahooFinanceScraper.getChangeAmountAndRatio().getClass())));
+        // Action
+        Class<? extends Pair> expectedClass = yahooFinanceScraper.getFinanceRunner().getChangeAmountAndRatio().getClass();
+        // Assert
+        assertThat(doublePair.getClass(), is(equalTo(expectedClass)));
     }
 
     @Test
     public void shouldReturnConvenientToString() {
+        // Arrange
         final String expected = String.format("@YahooFinanceScraper%d[rootURL:%s]",
-                System.identityHashCode(yahooFinanceScraper), yahooFinanceScraper.getYahooFinanceWebURL());
-        assertThat(expected, is(equalTo(yahooFinanceScraper.toString())));
+                System.identityHashCode(yahooFinanceScraper), yahooFinanceScraper.getFinanceRunner().getFinanceWebURL());
+        // Action
+        String toStringValue = yahooFinanceScraper.toString();
+        // Assert
+        assertThat(expected, is(equalTo(toStringValue)));
     }
 }

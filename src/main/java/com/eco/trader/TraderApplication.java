@@ -1,6 +1,7 @@
 package com.eco.trader;
 
 import com.eco.trader.util.scraper.YahooFinanceScraper;
+import com.eco.trader.util.scraper.runners.DefaultURLTesters;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,14 +26,9 @@ public class TraderApplication {
     public String getUSD() {
         long start = System.currentTimeMillis();
         yahooFinanceScraper = new YahooFinanceScraper("https://finance.yahoo.com/quote/TRY%3DX/community?p=TRY%3DX");
-        String returnValue = String.valueOf(yahooFinanceScraper.getCurrentValue());
-        // finding the time after the operation is executed
-        long end = System.currentTimeMillis();
-        //finding the time difference and converting it into seconds
-        float sec = (end - start) / 1000F;
-        System.out.println(sec + " seconds");
+        String returnValue = String.valueOf(yahooFinanceScraper.getFinanceRunner().getCurrentValue());
+        yahooFinanceScraper.getFinanceRunner().update();
+        returnValue = String.valueOf(yahooFinanceScraper.getFinanceRunner().getCurrentValue()) + " " + String.valueOf(yahooFinanceScraper.getFinanceRunner().getChangeAmountAndRatio());
         return returnValue;
     }
-
-
 }
