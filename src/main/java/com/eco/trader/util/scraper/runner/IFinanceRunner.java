@@ -1,5 +1,4 @@
-package com.eco.trader.util.scraper.runners;
-
+package com.eco.trader.util.scraper.runner;
 
 import org.javatuples.Pair;
 

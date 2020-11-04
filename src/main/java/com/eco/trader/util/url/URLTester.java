@@ -10,11 +10,11 @@ import java.util.regex.Pattern;
  */
 public class URLTester<T extends URLNotValidException> {
     private final Pattern urlPattern;
-    private final Supplier<T> exceptionConstructor;
+    private final Supplier<T> exceptionSupplier;
 
-    public URLTester(Pattern urlPattern, Supplier<T> exceptionConstructor) {
+    public URLTester(Pattern urlPattern, Supplier<T> exceptionSupplier) {
         this.urlPattern = urlPattern;
-        this.exceptionConstructor = Objects.requireNonNull(exceptionConstructor);
+        this.exceptionSupplier = Objects.requireNonNull(exceptionSupplier);
     }
 
     /**
@@ -24,7 +24,7 @@ public class URLTester<T extends URLNotValidException> {
      */
     public void testURL(String url) throws URLNotValidException {
         if (!isViableURL(url)) {
-            throw exceptionConstructor.get();
+            throw exceptionSupplier.get();
         }
     }
 

@@ -1,6 +1,5 @@
-package com.eco.trader.util.scraper.runners;
+package com.eco.trader.util.scraper.runner;
 
-import com.eco.trader.util.url.NotValidYahooFinanceURLException;
 import com.eco.trader.util.url.URLNotValidException;
 import com.eco.trader.util.url.URLTester;
 import org.javatuples.Pair;
@@ -9,7 +8,6 @@ import org.jsoup.nodes.Document;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.regex.Pattern;
 
 /**
  * A class for creating JSoupRunner objects.

@@ -1,7 +1,7 @@
 package com.eco.trader;
 
 import com.eco.trader.util.scraper.YahooFinanceScraper;
-import com.eco.trader.util.scraper.runners.DefaultURLTesters;
+import com.eco.trader.util.scraper.runner.JSoupRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,10 +25,12 @@ public class TraderApplication {
     @RequestMapping("/usd")
     public String getUSD() {
         long start = System.currentTimeMillis();
-        yahooFinanceScraper = new YahooFinanceScraper("https://finance.yahoo.com/quote/TRY%3DX/community?p=TRY%3DX");
+        yahooFinanceScraper =
+                YahooFinanceScraper.createYahooFinanceScraperFromClass("https://finance.yahoo.com/quote/TRY%3DX/community?p=TRY%3DX", JSoupRunner.class);
         String returnValue = String.valueOf(yahooFinanceScraper.getFinanceRunner().getCurrentValue());
         yahooFinanceScraper.getFinanceRunner().update();
-        returnValue = String.valueOf(yahooFinanceScraper.getFinanceRunner().getCurrentValue()) + " " + String.valueOf(yahooFinanceScraper.getFinanceRunner().getChangeAmountAndRatio());
+        returnValue = String.valueOf(yahooFinanceScraper.getFinanceRunner().getCurrentValue())
+                + " " + String.valueOf(yahooFinanceScraper.getFinanceRunner().getChangeAmountAndRatio());
         return returnValue;
     }
 }
